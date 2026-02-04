@@ -144,7 +144,7 @@ def run_ablation_study(
     print("STEP 3: ABLATION STUDY")
     print("="*70)
 
-    metrics = EvaluationMetrics(use_bert_score=False)  # Faster
+    metrics = EvaluationMetrics(use_bert_score=True)  # Faster
     innovative = InnovativeEvaluator(hybrid_system, None, metrics)
 
     # Run ablation
