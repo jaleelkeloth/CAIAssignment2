@@ -166,7 +166,7 @@ def run_error_analysis(
     print("STEP 4: ERROR ANALYSIS")
     print("="*70)
 
-    metrics = EvaluationMetrics(use_bert_score=False)
+    metrics = EvaluationMetrics(use_bert_score=True)
     innovative = InnovativeEvaluator(None, None, metrics)
 
     error_results = innovative.analyze_errors(evaluation_results)
