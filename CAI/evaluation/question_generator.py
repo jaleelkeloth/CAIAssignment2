@@ -99,28 +99,32 @@ class QuestionGenerator:
 
     def _extract_entities(self, text: str) -> List[str]:
         """Extract potential entities from text."""
-        # Simple entity extraction using capitalized words
-        words = text.split()
+        # Split by any whitespace and filter out empty strings immediately
+        words = [w for w in text.split() if w]
         entities = []
-
+        
         i = 0
-        while i < len(words):
-            if words[i][0].isupper() if words[i] else False:
-                entity = [words[i]]
+        n = len(words)
+        while i < n:
+            # Check if the current word is capitalized (potential entity start)
+            if words[i][0].isupper():
+                entity_parts = [words[i]]
                 j = i + 1
-                while j < len(words) and words[j][0].isupper() if words[j] else False:
-                    entity.append(words[j])
+                # Look ahead for multi-word entities (e.g., "New York City")
+                while j < n and words[j] and words[j][0].isupper():
+                    entity_parts.append(words[j])
                     j += 1
-                entities.append(' '.join(entity))
-                i = j
+                
+                entities.append(' '.join(entity_parts))
+                i = j  # Move index forward by the number of words in the entity
             else:
                 i += 1
 
-        # Filter out common words and short entities
+        # Filter out common pronouns and short noise
         common_words = {'The', 'This', 'That', 'These', 'Those', 'It', 'They', 'He', 'She', 'I', 'We'}
         entities = [e for e in entities if e not in common_words and len(e) > 2]
 
-        return list(set(entities))[:10]  # Limit to 10 entities
+        return list(set(entities))[:10]
 
     def _generate_llm_question(self, context: str, answer_hint: str = None) -> Optional[str]:
         """Generate a question using the LLM."""
